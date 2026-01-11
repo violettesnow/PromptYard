@@ -1,8 +1,10 @@
 
+// Use correct imports as per guidelines
 import { GoogleGenAI, Type } from "@google/genai";
 import { GeminiExtraction } from "../types";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always use process.env.API_KEY directly as per guidelines
+const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 /**
  * Extracts prompt content from various sources with high-fidelity synthesis.
@@ -23,23 +25,17 @@ export const extractPromptFromSource = async (
 
   const response = await ai.models.generateContent({
     model: 'gemini-3-pro-preview', // Using Pro for deep synthesis across platforms
-    contents: `${sourceInstructions[type]}. \n\nInput Content/URL: ${input}.
-    
-    Research related engineering techniques using Google Search.
-    Return in this EXACT JSON format:
-    {
-      "title": "A precise, professional name for this asset",
-      "content": "The actual prompt text with variables highlighted if applicable",
-      "tags": ["model-name", "industry", "complexity", "technique"],
-      "analysis": "A deep analysis of the prompt's logical structure and why it works."
-    }`,
+    contents: `Input Content/URL: ${input}`,
     config: {
+      // Use systemInstruction for better control
+      systemInstruction: `${sourceInstructions[type]}. Research related engineering techniques using Google Search. Return your findings in a structured JSON block containing "title", "content", "tags" (string array), and "analysis".`,
       tools: [{ googleSearch: {} }],
       thinkingConfig: { thinkingBudget: 4000 } // High budget for deep analysis
     }
   });
 
   const text = response.text || '';
+  // Extract URLs from groundingChunks as per guidelines
   const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
   const groundingUrls = groundingChunks
     .map((chunk: any) => chunk.web?.uri || chunk.maps?.uri)
@@ -95,6 +91,7 @@ export const extractPromptFromImage = async (base64Data: string): Promise<Gemini
   });
 
   try {
+    // response.text is a property, not a function
     return { ...JSON.parse(response.text || '{}'), source_type: 'drive' };
   } catch {
     return { title: "Visual Rescue", content: "Failed to parse OCR", tags: ["Error"], source_type: 'drive' };
@@ -135,7 +132,17 @@ export const refineTags = async (content: string): Promise<string[]> => {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: `Suggest 4 SEO-optimized tags for this prompt: ${content}`,
-    config: { responseMimeType: "application/json", thinkingConfig: { thinkingBudget: 500 } }
+    config: { 
+      responseMimeType: "application/json", 
+      thinkingConfig: { thinkingBudget: 500 },
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          tags: { type: Type.ARRAY, items: { type: Type.STRING } }
+        },
+        required: ["tags"]
+      }
+    }
   });
   try { return JSON.parse(response.text || '{"tags":[]}').tags; } catch { return []; }
 };
@@ -147,8 +154,11 @@ export const generatePromptImage = async (promptContent: string): Promise<string
     contents: { parts: [ { text: `Cinematic 3D abstract art representation of this idea: ${promptContent.substring(0, 100)}. Deep violets, glass textures, obsidian background. NO TEXT.` } ] },
     config: { imageConfig: { aspectRatio: "16:9" } }
   });
-  for (const part of response.candidates?.[0]?.content?.parts || []) {
-    if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
+  // Iterate through parts to find the image part as per guidelines
+  if (response.candidates?.[0]?.content?.parts) {
+    for (const part of response.candidates[0].content.parts) {
+      if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
+    }
   }
   return 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800';
 };

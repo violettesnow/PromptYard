@@ -36,3 +36,5 @@ export interface ConnectedSource {
   connected: boolean;
   lastSync?: string;
 }
+
+export type UserTier = 'free' | 'premium';

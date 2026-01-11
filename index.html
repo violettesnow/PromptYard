@@ -1,10 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompt Yard | Intelligent Stash</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#030303">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PromptYard">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2592/2592317.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +50,7 @@
               'fade-in': 'fade-in 0.6s ease-out forwards',
               'shimmer': 'shimmer 2s infinite linear',
               'marquee': 'marquee 40s linear infinite',
+              'check': 'check 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards'
             },
             keyframes: {
               'subtle-rise': {
@@ -61,6 +68,10 @@
               'marquee': {
                 '0%': { transform: 'translateX(0)' },
                 '100%': { transform: 'translateX(-50%)' }
+              },
+              'check': {
+                '0%': { transform: 'scale(0.5)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' }
               }
             }
           }
@@ -109,13 +120,14 @@
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
     "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.90.1",
-    "jspdf": "https://esm.sh/jspdf@^2.5.1"
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "@stripe/stripe-js": "https://esm.sh/@stripe/stripe-js@^3.0.0"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>

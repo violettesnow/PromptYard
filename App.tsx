@@ -1,14 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase, signInWithGoogle, signOut } from './services/supabase';
 import Hero from './components/Hero';
 import Dashboard from './components/Dashboard';
 import SourceAuth from './components/SourceAuth';
+import PaymentModal from './components/PaymentModal';
 
 const App: React.FC = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showSourceAuth, setShowSourceAuth] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [isPremium, setIsPremium] = useState(false);
   const [publicVaultId, setPublicVaultId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,20 +23,25 @@ const App: React.FC = () => {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session && !vaultId) {
+      if (session) {
         const onboarded = localStorage.getItem(`onboarded_${session.user.id}`);
-        if (!onboarded) setShowSourceAuth(true);
+        const premium = localStorage.getItem(`premium_${session.user.id}`) === 'true';
+        setIsPremium(premium);
+        if (!onboarded && !vaultId) setShowSourceAuth(true);
       }
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session && !vaultId) {
+      if (session) {
         const onboarded = localStorage.getItem(`onboarded_${session.user.id}`);
-        if (!onboarded) setShowSourceAuth(true);
+        const premium = localStorage.getItem(`premium_${session.user.id}`) === 'true';
+        setIsPremium(premium);
+        if (!onboarded && !vaultId) setShowSourceAuth(true);
       } else {
         setShowSourceAuth(false);
+        setIsPremium(false);
       }
     });
 
@@ -46,6 +53,14 @@ const App: React.FC = () => {
       localStorage.setItem(`onboarded_${session.user.id}`, 'true');
     }
     setShowSourceAuth(false);
+  };
+
+  const handleUpgradeSuccess = () => {
+    if (session) {
+      localStorage.setItem(`premium_${session.user.id}`, 'true');
+      setIsPremium(true);
+      setShowPayment(false);
+    }
   };
 
   if (loading) {
@@ -70,6 +85,8 @@ const App: React.FC = () => {
           }} 
           isPublicView={true} 
           onSignIn={signInWithGoogle}
+          isPremium={false}
+          onUpgrade={() => {}}
         />
       </div>
     );
@@ -82,7 +99,22 @@ const App: React.FC = () => {
       ) : showSourceAuth ? (
         <SourceAuth onComplete={handleOnboardingComplete} />
       ) : (
-        <Dashboard user={session.user} onSignOut={signOut} onManageSources={() => setShowSourceAuth(true)} />
+        <>
+          <Dashboard 
+            user={session.user} 
+            onSignOut={signOut} 
+            onManageSources={() => setShowSourceAuth(true)}
+            isPremium={isPremium}
+            onUpgrade={() => setShowPayment(true)}
+          />
+          {showPayment && (
+            <PaymentModal 
+              onClose={() => setShowPayment(false)} 
+              onSuccess={handleUpgradeSuccess} 
+              userEmail={session.user?.email}
+            />
+          )}
+        </>
       )}
     </div>
   );
