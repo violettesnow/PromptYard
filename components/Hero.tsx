@@ -50,10 +50,10 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-[-0.07em] text-white leading-[0.95] md:leading-[0.82] max-w-5xl mx-auto uppercase select-none relative mb-1 md:mb-2">
             DON'T BURY YOUR GOLD. <br />
             <span 
-              className="bg-clip-text text-transparent bg-gradient-to-tr from-[#78350f] via-[#fbbf24] to-[#fef3c7] inline-block transition-all duration-700 transform hover:scale-105 cursor-default mt-1 md:mt-2 animate-fade-in"
+              className="bg-clip-text text-transparent bg-gradient-to-tr from-[#6d28d9] via-[#d946ef] to-[#f5d0fe] inline-block transition-all duration-700 transform hover:scale-105 cursor-default mt-1 md:mt-2 animate-fade-in"
               style={{
-                filter: 'drop-shadow(0 -10px 40px rgba(245, 158, 11, 0.6))',
-                textShadow: '0 0 45px rgba(245,158,11,1), 0 0 90px rgba(245,158,11,0.5), 0 -10px 60px rgba(245,158,11,0.7)'
+                filter: 'drop-shadow(0 -10px 40px rgba(217, 70, 239, 0.6))',
+                textShadow: '0 0 45px rgba(217,70,239,1), 0 0 90px rgba(217,70,239,0.5), 0 -10px 60px rgba(217,70,239,0.7)'
               }}
             >
               MAP IT.
@@ -61,32 +61,44 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
           </h1>
 
           {/* Grouped CTA and Tagline */}
-          <div className="flex flex-col items-center space-y-4 md:space-y-6 w-full relative">
+          <div className="flex flex-col items-center space-y-6 md:space-y-8 w-full relative">
             
             {/* Aurora Glow behind the CTA */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-amber-500/10 blur-[80px] rounded-full pointer-events-none opacity-40"></div>
 
-            {/* CTA Button with Liquid Gold Chronos Branding */}
+            {/* CTA Button with Enhanced 3D Depth */}
             <div className="flex flex-col items-center opacity-0 animate-subtle-rise relative z-10" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
               <button
                 onClick={onSignIn}
-                className="group relative px-10 md:px-16 py-3.5 md:py-4 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 border border-amber-300/30 text-obsidian-950 font-display font-black rounded-full text-lg md:text-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.6)] uppercase tracking-[0.2em] md:tracking-[0.3em] overflow-hidden flex items-center gap-6"
+                style={{
+                  boxShadow: `
+                    0 1px 1px rgba(255,255,255,0.4) inset,
+                    0 10px 20px -5px rgba(0,0,0,0.3),
+                    0 20px 40px -10px rgba(245, 158, 11, 0.5),
+                    0 0 0 1px rgba(251, 191, 36, 0.4)
+                  `
+                }}
+                className="group relative px-10 md:px-16 py-3.5 md:py-4 bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 border border-white/20 text-obsidian-950 font-display font-black rounded-full text-lg md:text-2xl transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-1 active:scale-95 active:translate-y-0.5 uppercase tracking-[0.2em] md:tracking-[0.3em] overflow-hidden flex items-center gap-6"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                {/* Internal Shimmer Layer */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
                 
-                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0">
+                {/* Logo with Glow */}
+                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0 drop-shadow-md">
                   <Logo className="w-full h-full" />
                 </div>
                 
-                <span className="relative z-10">MAP YOUR PROMPTS — FREE</span>
+                <span className="relative z-10 drop-shadow-sm">MAP YOUR PROMPTS — FREE</span>
               </button>
             </div>
             
-            {/* Tagline - Refined font weight and muted color */}
-            <div className="opacity-0 animate-fade-in text-center w-full max-w-6xl px-4 relative z-10" style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
+            {/* Tagline - Refined width and wrapping to keep focus central */}
+            <div className="opacity-0 animate-fade-in text-center w-full max-w-3xl px-4 relative z-10" style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
               <p className="text-slate-400/80 text-base md:text-xl font-light tracking-tight leading-relaxed">
-                <span className="block md:inline-block md:whitespace-nowrap md:mr-2">Stop losing your best AI insights in the noise.</span>
-                <span className="block md:inline-block md:whitespace-nowrap">Deep-scan your inbox, bookmarks and Drive to organize prompts into a structured directory.</span>
+                <span className="block mb-2 md:mb-1">Stop losing your best AI insights in the noise.</span>
+                <span className="block text-slate-500/80 text-sm md:text-lg">
+                  Deep-scan your inbox, bookmarks, and Drive. <span className="font-black text-amber-500/90 ml-0.5">Consolidate your bullion.</span>
+                </span>
               </p>
             </div>
           </div>
