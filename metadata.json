@@ -1,0 +1,8 @@
+{
+  "name": "PromptYard",
+  "description": "Never lose an AI prompt again. Import X/Twitter bookmarks and screenshots into a searchable, AI-enhanced vault with visual previews.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
