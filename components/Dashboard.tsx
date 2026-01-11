@@ -1,4 +1,3 @@
-
 // Add React to the imports to fix 'Cannot find namespace React' error
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Prompt, AppState, ConnectedSource } from '../types';
@@ -6,6 +5,7 @@ import { extractPromptFromSource, extractPromptFromImage, extractPromptFromVideo
 import { supabase } from '../services/supabase';
 import PromptCard from './PromptCard';
 import { jsPDF } from 'jspdf';
+import Logo from './Logo';
 
 interface DashboardProps {
   user: any;
@@ -253,12 +253,14 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
     return matchesSearch && (selectedTag ? p.tags.includes(selectedTag) : true);
   });
 
+  const uniqueTags = Array.from(new Set(prompts.flatMap(p => p.tags)));
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 space-y-10 font-sans">
       <header className="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-white/5 pb-6">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => !isPublicView && window.location.reload()}>
-          <div className="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-2xl shadow-brand-500/20">
-             <DriveIcon />
+          <div className="w-10 h-10 flex items-center justify-center">
+             <Logo className="w-full h-full drop-shadow-[0_0_8px_rgba(139,92,246,0.3)]" />
           </div>
           <div>
             <h1 className="text-lg font-display font-black text-white uppercase leading-none tracking-tighter">Prompt Yard</h1>
@@ -309,168 +311,165 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
         </div>
       </header>
 
-      {showInstallGuide && (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 backdrop-blur-2xl animate-fade-in">
-          <div className="max-w-xl w-full bg-obsidian-950 border-2 border-white/10 rounded-[40px] p-10 space-y-8 relative overflow-hidden shadow-[0_0_100px_rgba(139,92,246,0.1)]">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-600/10 blur-[100px] pointer-events-none rounded-full"></div>
-            <div className="space-y-3">
-              <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">Mobile Deployment</h2>
-              <p className="text-obsidian-400 text-xs font-medium">Equip PromptYard as a standalone application on your device.</p>
-            </div>
-            <div className="space-y-6">
-              <div className="p-6 bg-white/5 rounded-3xl border border-white/5 space-y-4">
-                <h3 className="text-[10px] font-display font-black text-brand-500 uppercase tracking-widest">iOS / Safari</h3>
-                <p className="text-[11px] text-obsidian-200">Tap 'Share' and select 'Add to Home Screen'.</p>
-              </div>
-              <div className="p-6 bg-white/5 rounded-3xl border border-white/5 space-y-4">
-                <h3 className="text-[10px] font-display font-black text-green-500 uppercase tracking-widest">Android / Chrome</h3>
-                <p className="text-[11px] text-obsidian-200">Open Menu and select 'Install App'.</p>
-              </div>
-            </div>
-            <button onClick={() => setShowInstallGuide(false)} className="w-full py-4 bg-white text-obsidian-950 font-display font-black rounded-2xl uppercase text-[10px] tracking-widest hover:bg-obsidian-100 transition-all">Got it</button>
-          </div>
-        </div>
-      )}
-
-      {showCloudGuide && (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 backdrop-blur-2xl animate-fade-in">
-          <div className="max-w-2xl w-full bg-obsidian-950 border-2 border-white/10 rounded-[40px] p-10 space-y-8 relative overflow-hidden">
-            <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter">Google Cloud Setup</h2>
-            <div className="grid gap-3 font-mono">
-              {[
-                { step: "01", text: "Create a Project at console.cloud.google.com" },
-                { step: "02", text: "Enable Gmail, Drive, and People APIs" },
-                { step: "03", text: "Configure OAuth Consent Screen" },
-                { step: "04", text: "Add Scopes: gmail.readonly, drive.readonly" },
-                { step: "05", text: "Create OAuth 2.0 Client ID" }
-              ].map(item => (
-                <div key={item.step} className="flex items-center gap-4 p-3 bg-white/5 rounded-2xl border border-white/5">
-                  <span className="text-brand-500 font-display font-black text-lg">{item.step}</span>
-                  <p className="text-[10px] text-obsidian-200 uppercase tracking-wide">{item.text}</p>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => setShowCloudGuide(false)} className="w-full py-4 bg-white text-obsidian-950 font-display font-black rounded-2xl uppercase text-[10px] tracking-widest">Close</button>
-          </div>
-        </div>
-      )}
-
-      {isCameraActive && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-6 backdrop-blur-xl">
-          <div className="relative max-w-2xl w-full aspect-video rounded-[40px] overflow-hidden border-2 border-brand-500/50 shadow-2xl">
-            <video ref={videoRef} className="w-full h-full object-cover" autoPlay playsInline muted />
-            <canvas ref={canvasRef} className="hidden" />
-            <button onClick={captureFrame} className="absolute bottom-10 left-1/2 -translate-x-1/2 px-10 py-4 bg-white text-black font-display font-black rounded-full uppercase text-xs">Capture & Analyze</button>
-            <button onClick={stopCamera} className="absolute top-8 right-8 p-4 bg-black/40 text-white rounded-full">
-               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-          </div>
-        </div>
-      )}
-
       {!isPublicView && (
-        <section className="glass-card rounded-[32px] p-8 space-y-6 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-brand-600/5 blur-[100px] pointer-events-none rounded-full"></div>
-          
-          <div className="grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8 space-y-5 relative">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${status === AppState.LOADING ? 'bg-brand-500 animate-pulse' : 'bg-obsidian-700'}`}></div>
-                  <h2 className="text-[10px] font-display font-black uppercase tracking-[0.2em] text-obsidian-400">Intelligence Intake</h2>
-                </div>
-              </div>
-              
-              <div className="relative group/input">
-                <textarea
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Paste URLs from X, Drive, Gmail or dictate your prompt..."
-                  className="w-full h-40 bg-obsidian-900 border-2 border-white/5 rounded-[24px] p-6 text-sm text-obsidian-100 focus:outline-none focus:border-brand-500/30 transition-all font-mono resize-none leading-relaxed"
-                />
-                <button 
-                  onClick={handleVoiceInput}
-                  className={`absolute bottom-4 right-4 p-3 rounded-xl transition-all shadow-xl ${isListening ? 'bg-brand-600 text-white animate-pulse' : 'bg-obsidian-800 text-obsidian-500 hover:text-white'}`}
-                >
-                  <MicIcon />
-                </button>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-3">
-                <input 
-                  value={manualTags} 
-                  onChange={(e) => setManualTags(e.target.value)} 
-                  placeholder="Additional tags (comma separated)..." 
-                  className="flex-1 px-6 py-3.5 bg-obsidian-900 border-2 border-white/5 rounded-xl text-xs font-sans focus:outline-none focus:border-brand-500/20" 
-                />
-                <div className="flex gap-2">
-                  <button 
-                    onClick={handleImport} 
-                    disabled={status === AppState.LOADING || !inputText.trim()} 
-                    className="px-8 py-3.5 bg-white text-obsidian-950 font-display font-black rounded-xl shadow-xl hover:bg-obsidian-100 transition-all uppercase tracking-tight text-xs"
-                  >
-                    Rescue
-                  </button>
-                  <button onClick={startCamera} className="p-3.5 bg-brand-600 text-white rounded-xl shadow-lg hover:bg-brand-500 transition-all flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    {!isPremium && <LockIcon />}
-                  </button>
-                </div>
-              </div>
+        <section className="bg-obsidian-900/40 p-8 rounded-[40px] border border-white/5 space-y-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Paste X/Twitter bookmark URL, Google Drive link, or manual prompt text..."
+                className="w-full h-32 bg-obsidian-950 border border-white/10 rounded-3xl p-6 text-sm text-white focus:border-brand-500/50 outline-none transition-all resize-none"
+              />
+              <button 
+                onClick={handleVoiceInput}
+                className={`absolute right-4 bottom-4 p-3 rounded-2xl transition-all ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-obsidian-800 text-obsidian-400 hover:text-white'}`}
+              >
+                <MicIcon />
+              </button>
             </div>
-            
-            <div className="lg:col-span-4 flex flex-col justify-end p-8 bg-obsidian-900/50 rounded-[24px] border border-white/5 relative overflow-hidden">
-              <h3 className="text-[9px] font-display font-black uppercase text-brand-500 mb-4 tracking-[0.25em]">Agent Status</h3>
-              <div className="space-y-3">
-                {[
-                  { label: 'X Grounding Agent', status: 'Online', icon: <XIcon /> },
-                  { label: 'Gmail Synthesis', status: 'Online', icon: <GmailIcon /> },
-                  { label: 'Drive Crawler', status: 'Active', icon: <DriveIcon /> }
-                ].map(s => (
-                  <div key={s.label} className="flex items-center justify-between group/status">
-                    <div className="flex items-center gap-2 text-[10px] font-sans font-bold text-obsidian-400">
-                       <span className="opacity-50 scale-75">{s.icon}</span> {s.label}
-                    </div>
-                    <div className="text-[8px] font-display font-black text-green-500 uppercase tracking-widest">{s.status}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 pt-4 border-t border-white/5">
-                <p className="text-[9px] text-obsidian-600 leading-relaxed font-mono min-h-[2.5rem] uppercase tracking-tighter">
-                   {loadingMsg || '>> System idle. Waiting for prompt ingestion...'}
-                </p>
-              </div>
+            <div className="flex flex-col gap-3 w-full md:w-64">
+              <input
+                value={manualTags}
+                onChange={(e) => setManualTags(e.target.value)}
+                placeholder="Add tags (comma separated)"
+                className="w-full px-5 py-4 bg-obsidian-950 border border-white/10 rounded-2xl text-xs text-white outline-none focus:border-brand-500/50"
+              />
+              <button
+                onClick={handleImport}
+                disabled={status === AppState.LOADING || !inputText.trim()}
+                className="flex-1 bg-white text-obsidian-950 font-display font-black uppercase text-xs tracking-widest rounded-2xl hover:bg-brand-500 hover:text-white transition-all disabled:opacity-50 active:scale-95"
+              >
+                Rescue Intelligence
+              </button>
+              <button
+                onClick={startCamera}
+                className="px-5 py-4 bg-obsidian-800 text-obsidian-300 border border-white/10 rounded-2xl text-[9px] font-display font-black uppercase tracking-widest hover:text-white transition-all flex items-center justify-center gap-2"
+              >
+                <MobileIcon /> Visual Scan
+              </button>
             </div>
           </div>
         </section>
       )}
 
-      <section className="space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl md:text-4xl font-display font-black text-white uppercase tracking-tighter">The Rescued Stash</h2>
-            <p className="text-[10px] font-display font-bold uppercase tracking-[0.3em] text-obsidian-500">Accessing your indexed intelligence vault</p>
-          </div>
-          <div className="relative w-full md:w-80">
-            <input 
-              value={searchQuery} 
-              onChange={(e) => setSearchQuery(e.target.value)} 
-              placeholder="Search stash..." 
-              className="w-full pl-10 pr-4 py-3 bg-obsidian-900 border-2 border-white/5 rounded-xl text-xs font-sans focus:outline-none focus:border-brand-500/20" 
+      {status === AppState.LOADING && (
+        <div className="flex items-center gap-4 p-6 bg-brand-600/10 border border-brand-500/30 rounded-3xl animate-pulse">
+          <div className="w-5 h-5 border-2 border-brand-400 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs font-display font-black text-brand-400 uppercase tracking-widest">{loadingMsg}</span>
+        </div>
+      )}
+
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="relative w-full md:w-96">
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search your stash..."
+              className="w-full px-6 py-4 bg-obsidian-900/60 border border-white/5 rounded-2xl text-sm text-white outline-none focus:border-brand-500/30"
             />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-obsidian-600">
+               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto scrollbar-hide">
+            <button 
+              onClick={() => setSelectedTag(null)}
+              className={`px-4 py-2 rounded-xl text-[9px] font-display font-black uppercase tracking-widest transition-all ${!selectedTag ? 'bg-brand-500 text-white' : 'bg-obsidian-800 text-obsidian-500 hover:text-white'}`}
+            >
+              All Assets
+            </button>
+            {uniqueTags.map(tag => (
+              <button 
+                key={tag}
+                onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
+                className={`px-4 py-2 rounded-xl text-[9px] font-display font-black uppercase tracking-widest transition-all whitespace-nowrap ${tag === selectedTag ? 'bg-brand-500 text-white' : 'bg-obsidian-800 text-obsidian-500 hover:text-white'}`}
+              >
+                #{tag}
+              </button>
+            ))}
           </div>
         </div>
-        
+
         {filteredPrompts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPrompts.map(p => <PromptCard key={p.id} prompt={p} onTagClick={setSelectedTag} />)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredPrompts.map(prompt => (
+              <PromptCard key={prompt.id} prompt={prompt} onTagClick={setSelectedTag} />
+            ))}
           </div>
         ) : (
-          <div className="py-32 text-center space-y-4 bg-obsidian-900/20 border border-white/5 border-dashed rounded-[32px]">
-             <p className="text-obsidian-600 font-display font-black uppercase text-[9px] tracking-[0.4em]">No Intelligence Found</p>
+          <div className="py-20 flex flex-col items-center justify-center text-center space-y-4 opacity-50">
+            <div className="w-16 h-16 bg-obsidian-900 rounded-full flex items-center justify-center text-obsidian-700">
+              <FileTextIcon />
+            </div>
+            <p className="text-obsidian-500 text-sm font-medium">No intelligence found matching your criteria.</p>
           </div>
         )}
-      </section>
+      </div>
+
+      {/* Visual Scan Overlay */}
+      {isCameraActive && (
+        <div className="fixed inset-0 z-[150] bg-black flex flex-col items-center justify-center">
+          <video ref={videoRef} className="h-full w-full object-cover" playsInline />
+          <canvas ref={canvasRef} className="hidden" />
+          <div className="absolute bottom-10 left-0 w-full flex justify-center gap-6 px-6">
+            <button onClick={stopCamera} className="w-16 h-16 bg-obsidian-900 text-white rounded-full flex items-center justify-center border border-white/10">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <button onClick={captureFrame} className="w-20 h-20 bg-white text-obsidian-950 rounded-full flex items-center justify-center shadow-2xl scale-110 active:scale-95 transition-all">
+              <div className="w-16 h-16 border-4 border-obsidian-950 rounded-full"></div>
+            </button>
+            <div className="w-16 h-16"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Cloud Setup Guide Modal */}
+      {showCloudGuide && (
+        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-6" onClick={() => setShowCloudGuide(false)}>
+          <div className="max-w-xl w-full bg-obsidian-900 border border-white/10 rounded-[40px] p-10 space-y-8" onClick={e => e.stopPropagation()}>
+            <div className="space-y-2">
+               <h2 className="text-3xl font-display font-black uppercase tracking-tighter">Cloud Sync Config</h2>
+               <p className="text-obsidian-400 text-sm">Follow these steps to enable enterprise-grade background indexing.</p>
+            </div>
+            <div className="space-y-4">
+               {[
+                 "Visit Google Cloud Console & Create Project",
+                 "Enable Drive and Gmail APIs",
+                 "Create OAuth Credentials",
+                 "Paste Client ID in Profile Settings"
+               ].map((step, i) => (
+                 <div key={i} className="flex gap-4 p-4 bg-obsidian-950 rounded-2xl border border-white/5">
+                    <span className="text-brand-500 font-display font-black text-xl">0{i+1}</span>
+                    <span className="text-obsidian-300 font-medium text-sm">{step}</span>
+                 </div>
+               ))}
+            </div>
+            <button onClick={() => setShowCloudGuide(false)} className="w-full py-4 bg-white text-obsidian-950 font-display font-black rounded-2xl text-[10px] uppercase tracking-widest">Acknowledge</button>
+          </div>
+        </div>
+      )}
+
+      {/* Install Guide Modal */}
+      {showInstallGuide && (
+        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex items-center justify-center p-6" onClick={() => setShowInstallGuide(false)}>
+          <div className="max-w-xl w-full bg-obsidian-900 border border-white/10 rounded-[40px] p-10 text-center space-y-8" onClick={e => e.stopPropagation()}>
+            <div className="w-20 h-20 bg-brand-500/20 rounded-3xl flex items-center justify-center mx-auto text-brand-500">
+               <MobileIcon />
+            </div>
+            <div className="space-y-2">
+               <h2 className="text-3xl font-display font-black uppercase tracking-tighter">Install Mobile Yard</h2>
+               <p className="text-obsidian-400 text-sm">Add PromptYard to your home screen for instant scanning on the go.</p>
+            </div>
+            <div className="text-left bg-obsidian-950 p-6 rounded-3xl border border-white/5 space-y-4 text-xs">
+               <p className="text-obsidian-300 font-bold">iOS: <span className="font-normal">Tap Share button and select "Add to Home Screen"</span></p>
+               <p className="text-obsidian-300 font-bold">Android: <span className="font-normal">Tap browser menu and select "Install App"</span></p>
+            </div>
+            <button onClick={() => setShowInstallGuide(false)} className="w-full py-4 bg-white text-obsidian-950 font-display font-black rounded-2xl text-[10px] uppercase tracking-widest">Close Guide</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,22 +1,16 @@
-
 import React from 'react';
+import Logo from './Logo';
 
 interface HeroProps {
   onSignIn: () => void;
 }
-
-const GhostIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M12 2C8.686 2 6 4.686 6 8v9c0 1.105.895 2 2 2h8c1.105 0 2-.895 2-2V8c0-3.314-2.686-6-6-6zm-3 8c-.828 0-1.5-.672-1.5-1.5S8.172 7 9 7s1.5.672 1.5 1.5S9.828 10 9 10zm6 0c-.828 0-1.5-.672-1.5-1.5S14.172 7 15 7s1.5.672 1.5 1.5S15.828 10 15 10zM8 19v1.5a1 1 0 0 0 1.707.707L10.414 20l1.293 1.293a1 1 0 0 0 1.414 0L14.414 20l.707.707A1 1 0 0 0 16.828 20V19H8z" />
-  </svg>
-);
 
 const testimonials = [
   { name: "@dev_explorer", text: "The missing link in my AI workflow. PromptYard is essential." },
   { name: "Sarah J.", text: "Finally, a graveyard where prompts come back to life." },
   { name: "Marcus V.", text: "The search is incredible. Gemini indexing is a game changer." },
   { name: "@ai_enthusiast", text: "Saved me hours of scrolling through X bookmarks." },
-  { name: "Chen W.", text: "Visual previews make finding specific prompts effortless." },
+  { name: "Chen W.", text: "Visual previews make finding specific prompts effortlessly." },
   { name: "@creative_mind", text: "The Google Search grounding adds so much context." },
   { name: "Alex Rivera", text: "Enterprise ready? It's my daily driver now." },
   { name: "@prompt_king", text: "Thinking mode tagging is surprisingly accurate." },
@@ -24,98 +18,129 @@ const testimonials = [
 
 const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
   return (
-    <div className="relative min-h-screen flex flex-col items-center bg-obsidian-950 overflow-hidden font-sans">
-      {/* Sophisticated Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-brand-600/5 rounded-full blur-[160px] pointer-events-none opacity-60"></div>
+    <div className="relative min-h-screen flex flex-col bg-obsidian-950 overflow-hidden font-sans selection:bg-amber-500/20">
+      {/* Background Layering */}
+      <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
       
-      {/* Professional Navigation */}
-      <nav className="w-full max-w-7xl px-8 py-8 flex justify-between items-center z-20">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-brand-600 rounded-xl shadow-2xl shadow-brand-500/20 flex items-center justify-center text-white">
-            <GhostIcon className="w-5 h-5" />
-          </div>
-          <span className="text-lg font-display font-black tracking-tighter text-white">PROMPT YARD</span>
+      {/* Intense Ambient Glow - Subtle branding light */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1400px] aspect-square bg-amber-500/[0.02] rounded-full blur-[160px] pointer-events-none opacity-50"></div>
+
+      {/* Navigation - Tightened height and padding */}
+      <nav className="w-full max-w-7xl mx-auto px-6 md:px-12 py-3 md:py-5 flex justify-between items-center z-20">
+        <div className="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-60" onClick={() => window.location.reload()}>
+          <Logo className="w-7 h-7 filter drop-shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
+          <span className="text-[10px] font-display font-black tracking-[0.3em] text-white uppercase">PromptYard</span>
         </div>
-        <div className="flex items-center gap-6">
-          <span className="hidden md:block text-[9px] font-display font-bold tracking-[0.3em] uppercase text-obsidian-600">Enterprise Ready</span>
+        <div className="flex items-center gap-6 md:gap-12">
+          <span className="hidden sm:block text-[8px] font-black tracking-[0.4em] uppercase text-obsidian-700">Vault v1.2.0</span>
           <button 
             onClick={onSignIn}
-            className="text-xs font-display font-bold text-obsidian-400 hover:text-white transition-colors tracking-wide"
+            className="text-[10px] font-black text-obsidian-500 hover:text-white transition-colors uppercase tracking-[0.3em]"
           >
             Sign In
           </button>
         </div>
       </nav>
 
-      {/* Main Impact Section */}
-      <section className="flex-1 flex flex-col items-center justify-center px-6 z-10 text-center max-w-4xl space-y-10 animate-fade-in">
-        <div className="space-y-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tighter text-white leading-[1.1] md:leading-[1.05] max-w-4xl mx-auto">
-            Inboxes and bookmarks are where great prompts go to die.
+      {/* Main Content Area - Refined spacing */}
+      <main className="flex-1 flex flex-col justify-center items-center px-6 md:px-12 z-10 text-center max-w-7xl mx-auto w-full pt-4 md:pt-8 pb-12">
+        <div className="flex flex-col items-center animate-fade-in w-full space-y-12 md:space-y-16">
+          
+          {/* Headline - Responsive Scaling */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-[-0.07em] text-white leading-[0.95] md:leading-[0.82] max-w-5xl mx-auto uppercase select-none relative">
+            DON'T BURY YOUR GOLD. <br />
+            <span 
+              className="bg-clip-text text-transparent bg-gradient-to-tr from-[#78350f] via-[#fbbf24] to-[#fef3c7] inline-block transition-all duration-300 transform hover:scale-105 cursor-default mt-2 md:mt-4"
+              style={{
+                filter: 'drop-shadow(0 -20px 40px rgba(245, 158, 11, 0.4))',
+                textShadow: '0 0 25px rgba(245,158,11,0.7), 0 0 50px rgba(245,158,11,0.3), 0 -15px 40px rgba(245,158,11,0.5)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.textShadow = '0 0 45px rgba(245,158,11,1), 0 0 90px rgba(245,158,11,0.6), 0 -25px 70px rgba(245,158,11,0.8)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.textShadow = '0 0 25px rgba(245,158,11,0.7), 0 0 50px rgba(245,158,11,0.3), 0 -15px 40px rgba(245,158,11,0.5)';
+              }}
+            >
+              MAP IT.
+            </span>
           </h1>
-          <p className="text-obsidian-400 text-sm md:text-lg font-medium tracking-tight max-w-2xl mx-auto">
-            Rescue your AI intelligence from the scroll. Instant searchable vault for X, Drive, and Gmail.
-          </p>
+
+          {/* Grouped CTA and Tagline for tighter vertical relationship */}
+          <div className="flex flex-col items-center space-y-6 md:space-y-8 w-full">
+            {/* Central Star: The CTA Button (Smaller vertical padding) */}
+            <div className="flex flex-col items-center opacity-0 animate-subtle-rise" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+              <button
+                onClick={onSignIn}
+                className="group relative px-14 md:px-24 py-5 md:py-6 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-obsidian-950 font-display font-black rounded-[2rem] text-xl md:text-3xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_30px_70px_rgba(245,158,11,0.5)] hover:shadow-[0_50px_130px_rgba(245,158,11,0.8)] uppercase tracking-[0.2em] md:tracking-[0.4em] overflow-hidden"
+              >
+                {/* Glossy Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                <span className="relative z-10">MAP YOUR PROMPTS — FREE</span>
+              </button>
+            </div>
+            
+            {/* Tagline - Refined Typography with specific requested copy and line break */}
+            <div className="opacity-0 animate-fade-in text-center space-y-4 md:space-y-1" style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
+              <p className="text-slate-400 text-lg md:text-2xl font-light leading-snug max-w-sm md:max-w-6xl mx-auto px-4">
+                <span className="block mb-1 md:mb-2">Stop losing your best AI insights in the noise.</span>
+                <span className="block">Deep-scan your inbox, bookmarks and Google Drive to organize your saved prompts into a structured directory.</span>
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center gap-8">
-          <button
-            onClick={onSignIn}
-            className="px-12 py-5 bg-white text-obsidian-950 font-display font-black rounded-full text-xl md:text-2xl transition-all transform hover:scale-105 active:scale-95 ring-4 ring-brand-500/20 shadow-[0_0_20px_rgba(139,92,246,0.5)] hover:shadow-[0_0_35px_rgba(139,92,246,0.7)] hover:ring-brand-500/40 uppercase tracking-tighter"
-          >
-            SAVE YOURS — FREE
-          </button>
-        </div>
-        
-        <div className="flex flex-wrap justify-center items-center gap-8 opacity-30 grayscale hover:opacity-50 transition-all cursor-default pt-6">
-           <div className="flex items-center gap-2">
-             <span className="text-[10px] font-display font-black tracking-widest uppercase">Verified by Stripe</span>
+        {/* Trust Indicators */}
+        <div className="mt-20 md:mt-28 flex flex-wrap justify-center items-center gap-8 md:gap-20 opacity-20 hover:opacity-100 transition-opacity duration-1000 cursor-default grayscale hover:grayscale-0 px-6">
+           <div className="flex items-center gap-3">
+             <span className="text-[9px] font-black tracking-[0.5em] uppercase text-obsidian-600">Verified by Stripe</span>
            </div>
-           <div className="flex items-center gap-2">
-             <span className="text-[10px] font-display font-black tracking-widest uppercase">Secured via Cloudflare</span>
+           <div className="flex items-center gap-3">
+             <span className="text-[9px] font-black tracking-[0.5em] uppercase text-obsidian-600">Secured via Cloudflare</span>
            </div>
-           <div className="flex items-center gap-2">
-             <span className="text-[10px] font-display font-black tracking-widest uppercase">AI by Gemini</span>
+           <div className="flex items-center gap-3">
+             <span className="text-[9px] font-black tracking-[0.5em] uppercase text-obsidian-600">AI by Gemini 3</span>
            </div>
         </div>
-      </section>
+      </main>
 
-      {/* Simplified Status Footer */}
-      <footer className="w-full max-w-7xl px-8 py-10 flex flex-col md:flex-row items-center justify-between border-t border-white/5 text-[9px] text-obsidian-600 font-display font-bold uppercase tracking-[0.25em] gap-6">
-        <div className="flex items-center gap-4">
-           <span className="flex items-center gap-2">
-             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-             Yard Online
-           </span>
-           <span className="text-obsidian-800">|</span>
-           <span>&copy; 2025 PROMPT YARD</span>
-        </div>
-        <div className="flex gap-6">
-           <a href="#" className="hover:text-white transition-colors">Privacy</a>
-           <a href="#" className="hover:text-white transition-colors">Terms</a>
-           <a href="#" className="hover:text-white transition-colors">Contact</a>
-        </div>
-      </footer>
-
-      {/* Marquee Testimonials */}
-      <div className="w-full bg-obsidian-900/50 border-t border-white/5 py-5 overflow-hidden marquee-container">
+      {/* Testimonial Marquee */}
+      <div className="w-full bg-obsidian-900/10 border-y border-white/[0.02] py-10 md:py-14 overflow-hidden marquee-container">
         <div className="flex whitespace-nowrap marquee-content animate-marquee">
           {testimonials.map((t, i) => (
-            <div key={`t1-${i}`} className="inline-flex items-center gap-4 mx-10">
-              <span className="text-brand-400 font-display font-black text-[10px] uppercase tracking-[0.2em]">{t.name}</span>
-              <span className="text-obsidian-300 font-sans font-medium text-xs opacity-70">"{t.text}"</span>
-              <div className="w-1 h-1 bg-obsidian-700 rounded-full ml-3"></div>
+            <div key={`t1-${i}`} className="inline-flex items-center gap-10 md:gap-14 mx-12 md:mx-28">
+              <span className="text-amber-500/40 font-black text-[10px] uppercase tracking-[0.3em]">{t.name}</span>
+              <span className="text-slate-600 font-normal text-sm md:text-base tracking-tight italic">"{t.text}"</span>
+              <div className="w-[1px] h-8 bg-obsidian-800/40 ml-10 md:ml-14"></div>
             </div>
           ))}
+          {/* Seamless loop duplicate */}
           {testimonials.map((t, i) => (
-            <div key={`t2-${i}`} className="inline-flex items-center gap-4 mx-10">
-              <span className="text-brand-400 font-display font-black text-[10px] uppercase tracking-[0.2em]">{t.name}</span>
-              <span className="text-obsidian-300 font-sans font-medium text-xs opacity-70">"{t.text}"</span>
-              <div className="w-1 h-1 bg-obsidian-700 rounded-full ml-3"></div>
+            <div key={`t2-${i}`} className="inline-flex items-center gap-10 md:gap-14 mx-12 md:mx-28">
+              <span className="text-amber-500/40 font-black text-[10px] uppercase tracking-[0.3em]">{t.name}</span>
+              <span className="text-slate-600 font-normal text-sm md:text-base tracking-tight italic">"{t.text}"</span>
+              <div className="w-[1px] h-8 bg-obsidian-800/40 ml-10 md:ml-14"></div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="w-full max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between text-[9px] text-obsidian-700 font-black uppercase tracking-[0.5em] gap-8 text-center md:text-left">
+        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-20">
+           <span className="flex items-center gap-3 md:gap-6">
+             <div className="w-1.5 h-1.5 bg-amber-500 rounded-full opacity-50"></div>
+             Vault Infrastructure Online
+           </span>
+           <span className="hidden md:block opacity-10">/</span>
+           <span>&copy; 2025 PROMPT YARD</span>
+        </div>
+        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+           <a href="#" className="hover:text-white transition-colors">Privacy</a>
+           <a href="#" className="hover:text-white transition-colors">Terms</a>
+           <a href="#" className="hover:text-white transition-colors">Legal</a>
+        </div>
+      </footer>
     </div>
   );
 };
