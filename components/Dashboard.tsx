@@ -19,6 +19,8 @@ const DriveIcon = () => <svg viewBox="0 0 24 24" className="w-4 h-4" fill="curre
 const GmailIcon = () => <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M24 4.5v15c0 .85-.65 1.5-1.5 1.5H21V7.387l-9 6.463-9-6.463V21H1.5C.65 21 0 20.35 0 19.5v-15c0-.425.162-.8.431-1.068C.7 3.16 1.075 3 1.5 3H2l10 7.143L22 3h.5c.425 0 .8.16 1.069.432.27.268.431.643.431 1.068z" /></svg>;
 const MicIcon = () => <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>;
 const FileTextIcon = () => <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>;
+const CloudIcon = () => <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19a3.5 3.5 0 1 1 0-7c.1 0 .2 0 .3 0a7 7 0 1 0-13.3-3C2.1 9.4 0 12 0 15a5 5 0 0 0 5 5h12.5a3.5 3.5 0 0 0 0-7z"/></svg>;
+const DownloadIcon = () => <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
 
 const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources, isPublicView, onSignIn }) => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -30,6 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
   const [loadingMsg, setLoadingMsg] = useState('');
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [showCloudGuide, setShowCloudGuide] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +79,19 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
     }
   };
 
+  const handleExportStash = () => {
+    const dataStr = JSON.stringify(prompts, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const exportFileDefaultName = `prompt_yard_stash_${new Date().toISOString().split('T')[0]}.json`;
+
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', url);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+    URL.revokeObjectURL(url);
+  };
+
   const downloadPRD = () => {
     const doc = new jsPDF();
     const title = "PromptYard Product Requirements Document (PRD)";
@@ -93,7 +109,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
     doc.text(doc.splitTextToSize(summary, 170), 20, 52);
 
     doc.setFontSize(16);
-    doc.text("2. Key Features", 20, 75);
+    doc.text("2. Key Features", 20, 80);
     doc.setFontSize(12);
     const features = [
       "- Intelligent Intake: Extract prompts from X/Twitter URLs using agentic grounding.",
@@ -102,14 +118,14 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
       "- Deep Thinking: Contextual tagging and logical analysis of prompt patterns.",
       "- Unified Vault: Searchable, categorizable storage for high-value AI instructions."
     ];
-    let y = 82;
+    let y = 87;
     features.forEach(f => {
       doc.text(f, 20, y);
       y += 8;
     });
 
     doc.setFontSize(16);
-    doc.text("3. Technical Specifications", 20, 130);
+    doc.text("3. Technical Stack", 20, 135);
     doc.setFontSize(12);
     const tech = [
       "- Frontend: React 19, Tailwind CSS, Space Grotesk Font.",
@@ -117,9 +133,26 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
       "- AI Orchestration: Gemini 3 Pro (Analysis), 3 Flash (OCR), 2.5 Flash (Images).",
       "- Tools: Google Search grounding for real-time validation."
     ];
-    y = 137;
+    y = 142;
     tech.forEach(t => {
       doc.text(t, 20, y);
+      y += 8;
+    });
+
+    doc.setFontSize(16);
+    doc.text("4. Cloud Console Configuration", 20, 185);
+    doc.setFontSize(12);
+    const cloud = [
+      "- Project: Create at console.cloud.google.com",
+      "- APIs: Enable Google People API, Gmail API, and Drive API.",
+      "- OAuth: Configure Consent Screen (Internal/External).",
+      "- Scopes: Add 'gmail.readonly', 'drive.readonly', 'userinfo.email'.",
+      "- Credentials: Create OAuth 2.0 Client ID (Web Application).",
+      "- Redirect URI: https://[PROJECT-ID].supabase.co/auth/v1/callback"
+    ];
+    y = 192;
+    cloud.forEach(c => {
+      doc.text(c, 20, y);
       y += 8;
     });
 
@@ -259,6 +292,18 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
         </div>
         <div className="flex flex-wrap gap-4 items-center">
           <button 
+            onClick={() => setShowCloudGuide(true)}
+            className="flex items-center gap-2 px-5 py-3 bg-obsidian-800 border border-white/10 rounded-full text-[10px] font-display font-black uppercase tracking-widest text-obsidian-300 hover:text-white transition-all hover:bg-obsidian-700"
+          >
+            <CloudIcon /> Cloud Setup
+          </button>
+          <button 
+            onClick={handleExportStash}
+            className="flex items-center gap-2 px-5 py-3 bg-obsidian-800 border border-white/10 rounded-full text-[10px] font-display font-black uppercase tracking-widest text-obsidian-300 hover:text-white transition-all"
+          >
+            <DownloadIcon /> Export Stash
+          </button>
+          <button 
             onClick={downloadPRD}
             className="flex items-center gap-2 px-5 py-3 bg-obsidian-800 border border-white/10 rounded-full text-[10px] font-display font-black uppercase tracking-widest text-obsidian-300 hover:text-white transition-all"
           >
@@ -274,6 +319,50 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut, onManageSources,
           <button onClick={onSignOut} className="px-8 py-3 bg-obsidian-900 border border-white/10 rounded-full text-[10px] font-display font-black uppercase tracking-widest text-obsidian-500 hover:text-white transition-all">Log Out</button>
         </div>
       </header>
+
+      {showCloudGuide && (
+        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-6 backdrop-blur-2xl animate-fade-in">
+          <div className="max-w-3xl w-full bg-obsidian-950 border-2 border-white/10 rounded-[48px] p-12 space-y-10 relative overflow-hidden shadow-[0_0_100px_rgba(139,92,246,0.1)]">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-600/10 blur-[100px] pointer-events-none rounded-full"></div>
+            
+            <div className="space-y-4">
+              <h2 className="text-4xl font-display font-black text-white uppercase tracking-tighter">Google Cloud Console Setup</h2>
+              <p className="text-obsidian-400 text-sm font-medium">Follow these critical steps to authorize PromptYard's deep-sync features.</p>
+            </div>
+
+            <div className="grid gap-4 font-mono">
+              {[
+                { step: "01", text: "Create a Project at console.cloud.google.com" },
+                { step: "02", text: "Enable 'Gmail API', 'Google Drive API', and 'Google People API'" },
+                { step: "03", text: "Configure OAuth Consent Screen (Add your support email)" },
+                { step: "04", text: "Add Scopes: gmail.readonly, drive.readonly, userinfo.email" },
+                { step: "05", text: "Create OAuth 2.0 Client ID (Type: Web Application)" },
+                { step: "06", text: "Add Redirect URI: https://[PROJECT_ID].supabase.co/auth/v1/callback" }
+              ].map(item => (
+                <div key={item.step} className="flex items-center gap-6 p-4 bg-white/5 rounded-2xl border border-white/5 group hover:bg-white/10 transition-all">
+                  <span className="text-brand-500 font-display font-black text-xl">{item.step}</span>
+                  <p className="text-xs text-obsidian-200 uppercase tracking-wide">{item.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-4 pt-6">
+               <button 
+                 onClick={() => window.open('https://console.cloud.google.com', '_blank')}
+                 className="px-10 py-5 bg-brand-600 text-white font-display font-black rounded-2xl uppercase text-xs tracking-widest hover:bg-brand-500 transition-all shadow-xl shadow-brand-500/20"
+               >
+                 Go to Cloud Console
+               </button>
+               <button 
+                 onClick={() => setShowCloudGuide(false)}
+                 className="px-10 py-5 bg-white text-obsidian-950 font-display font-black rounded-2xl uppercase text-xs tracking-widest hover:bg-obsidian-100 transition-all"
+               >
+                 Acknowledge
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isCameraActive && (
         <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-6 backdrop-blur-xl">
