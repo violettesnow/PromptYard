@@ -9,6 +9,7 @@ const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 /**
  * Extracts prompt content from various sources with high-fidelity synthesis.
  * Uses Gemini 3 Pro for deep thinking when analyzing complex documents or emails.
+ * Now incorporates a Senior Product Designer persona for high-end organization.
  */
 export const extractPromptFromSource = async (
   input: string, 
@@ -28,7 +29,7 @@ export const extractPromptFromSource = async (
     contents: `Input Content/URL: ${input}`,
     config: {
       // Use systemInstruction for better control
-      systemInstruction: `${sourceInstructions[type]}. Research related engineering techniques using Google Search. Return your findings in a structured JSON block containing "title", "content", "tags" (string array), and "analysis".`,
+      systemInstruction: `Act as a Senior Product Designer. Prioritize a high-end, minimalist 'Obsidian' aesthetic in your analysis and categorization. ${sourceInstructions[type]}. Research related engineering techniques using Google Search. Return your findings in a structured JSON block containing "title", "content", "tags" (string array), and "analysis".`,
       tools: [{ googleSearch: {} }],
       thinkingConfig: { thinkingBudget: 4000 } // High budget for deep analysis
     }
@@ -71,7 +72,7 @@ export const extractPromptFromImage = async (base64Data: string): Promise<Gemini
     contents: {
       parts: [
         { inlineData: { data: base64Content, mimeType: 'image/jpeg' } },
-        { text: "Examine this prompt screenshot. Extract the text carefully. Provide title, tags, and a structural analysis." }
+        { text: "Examine this prompt screenshot. Act as a Senior Product Designer to extract and organize the text into a clean, professional structure. Provide title, tags, and a structural analysis." }
       ]
     },
     config: {
@@ -107,7 +108,7 @@ export const extractPromptFromVideo = async (frames: string[]): Promise<GeminiEx
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: {
-      parts: [ ...imageParts, { text: "Synthesize the prompt being demonstrated in these video frames." } ]
+      parts: [ ...imageParts, { text: "Act as a Senior Product Designer. Synthesize the prompt being demonstrated in these video frames into a high-fidelity asset description." } ]
     },
     config: {
       responseMimeType: "application/json",
@@ -131,7 +132,7 @@ export const refineTags = async (content: string): Promise<string[]> => {
   const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Suggest 4 SEO-optimized tags for this prompt: ${content}`,
+    contents: `Suggest 4 SEO-optimized tags for this prompt. Use high-end technical terminology: ${content}`,
     config: { 
       responseMimeType: "application/json", 
       thinkingConfig: { thinkingBudget: 500 },
@@ -151,7 +152,7 @@ export const generatePromptImage = async (promptContent: string): Promise<string
   const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash-image',
-    contents: { parts: [ { text: `Cinematic 3D abstract art representation of this idea: ${promptContent.substring(0, 100)}. Deep violets, glass textures, obsidian background. NO TEXT.` } ] },
+    contents: { parts: [ { text: `Senior Product Designer aesthetic: A cinematic 3D abstract art representation of this idea: ${promptContent.substring(0, 100)}. Palette: obsidian black, 24k metallic gold, and subtle neon magenta/cyan depth. Glass textures, high-end minimalist finish. NO TEXT.` } ] },
     config: { imageConfig: { aspectRatio: "16:9" } }
   });
   // Iterate through parts to find the image part as per guidelines

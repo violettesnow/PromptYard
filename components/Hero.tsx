@@ -25,11 +25,11 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
       {/* Intense Ambient Glow - Subtle branding light */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1400px] aspect-square bg-amber-500/[0.02] rounded-full blur-[160px] pointer-events-none opacity-50"></div>
 
-      {/* Navigation - Tightened height and padding */}
-      <nav className="w-full max-w-7xl mx-auto px-6 md:px-12 py-3 md:py-5 flex justify-between items-center z-20">
-        <div className="flex items-center gap-3 group cursor-pointer transition-opacity hover:opacity-60" onClick={() => window.location.reload()}>
-          <Logo className="w-7 h-7 filter drop-shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
-          <span className="text-[10px] font-display font-black tracking-[0.3em] text-white uppercase">PromptYard</span>
+      {/* Navigation */}
+      <nav className="w-full max-w-7xl mx-auto px-6 md:px-12 py-3 md:py-6 flex justify-between items-center z-20">
+        <div className="flex items-center gap-4 group cursor-pointer transition-opacity hover:opacity-80" onClick={() => window.location.reload()}>
+          <Logo className="w-14 h-14" />
+          <span className="text-sm font-display font-black tracking-[0.3em] text-white uppercase">PromptYard</span>
         </div>
         <div className="flex items-center gap-6 md:gap-12">
           <span className="hidden sm:block text-[8px] font-black tracking-[0.4em] uppercase text-obsidian-700">Vault v1.2.0</span>
@@ -42,56 +42,58 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
         </div>
       </nav>
 
-      {/* Main Content Area - Refined spacing */}
-      <main className="flex-1 flex flex-col justify-center items-center px-6 md:px-12 z-10 text-center max-w-7xl mx-auto w-full pt-4 md:pt-8 pb-12">
-        <div className="flex flex-col items-center animate-fade-in w-full space-y-12 md:space-y-16">
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col justify-center items-center px-6 md:px-12 z-10 text-center max-w-7xl mx-auto w-full pt-0 pb-8">
+        <div className="flex flex-col items-center animate-fade-in w-full space-y-0.5 md:space-y-1">
           
-          {/* Headline - Responsive Scaling */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-[-0.07em] text-white leading-[0.95] md:leading-[0.82] max-w-5xl mx-auto uppercase select-none relative">
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-black tracking-[-0.07em] text-white leading-[0.95] md:leading-[0.82] max-w-5xl mx-auto uppercase select-none relative mb-1 md:mb-2">
             DON'T BURY YOUR GOLD. <br />
             <span 
-              className="bg-clip-text text-transparent bg-gradient-to-tr from-[#78350f] via-[#fbbf24] to-[#fef3c7] inline-block transition-all duration-300 transform hover:scale-105 cursor-default mt-2 md:mt-4"
+              className="bg-clip-text text-transparent bg-gradient-to-tr from-[#78350f] via-[#fbbf24] to-[#fef3c7] inline-block transition-all duration-700 transform hover:scale-105 cursor-default mt-1 md:mt-2 animate-fade-in"
               style={{
-                filter: 'drop-shadow(0 -20px 40px rgba(245, 158, 11, 0.4))',
-                textShadow: '0 0 25px rgba(245,158,11,0.7), 0 0 50px rgba(245,158,11,0.3), 0 -15px 40px rgba(245,158,11,0.5)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.textShadow = '0 0 45px rgba(245,158,11,1), 0 0 90px rgba(245,158,11,0.6), 0 -25px 70px rgba(245,158,11,0.8)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.textShadow = '0 0 25px rgba(245,158,11,0.7), 0 0 50px rgba(245,158,11,0.3), 0 -15px 40px rgba(245,158,11,0.5)';
+                filter: 'drop-shadow(0 -10px 40px rgba(245, 158, 11, 0.6))',
+                textShadow: '0 0 45px rgba(245,158,11,1), 0 0 90px rgba(245,158,11,0.5), 0 -10px 60px rgba(245,158,11,0.7)'
               }}
             >
               MAP IT.
             </span>
           </h1>
 
-          {/* Grouped CTA and Tagline for tighter vertical relationship */}
-          <div className="flex flex-col items-center space-y-6 md:space-y-8 w-full">
-            {/* Central Star: The CTA Button (Smaller vertical padding) */}
-            <div className="flex flex-col items-center opacity-0 animate-subtle-rise" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+          {/* Grouped CTA and Tagline */}
+          <div className="flex flex-col items-center space-y-4 md:space-y-6 w-full relative">
+            
+            {/* Aurora Glow behind the CTA */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-amber-500/10 blur-[80px] rounded-full pointer-events-none opacity-40"></div>
+
+            {/* CTA Button with Liquid Gold Chronos Branding */}
+            <div className="flex flex-col items-center opacity-0 animate-subtle-rise relative z-10" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
               <button
                 onClick={onSignIn}
-                className="group relative px-14 md:px-24 py-5 md:py-6 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-obsidian-950 font-display font-black rounded-[2rem] text-xl md:text-3xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_30px_70px_rgba(245,158,11,0.5)] hover:shadow-[0_50px_130px_rgba(245,158,11,0.8)] uppercase tracking-[0.2em] md:tracking-[0.4em] overflow-hidden"
+                className="group relative px-10 md:px-16 py-3.5 md:py-4 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 border border-amber-300/30 text-obsidian-950 font-display font-black rounded-full text-lg md:text-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.6)] uppercase tracking-[0.2em] md:tracking-[0.3em] overflow-hidden flex items-center gap-6"
               >
-                {/* Glossy Shimmer Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                
+                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shrink-0">
+                  <Logo className="w-full h-full" />
+                </div>
+                
                 <span className="relative z-10">MAP YOUR PROMPTS — FREE</span>
               </button>
             </div>
             
-            {/* Tagline - Refined Typography with specific requested copy and line break */}
-            <div className="opacity-0 animate-fade-in text-center space-y-4 md:space-y-1" style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
-              <p className="text-slate-400 text-lg md:text-2xl font-light leading-snug max-w-sm md:max-w-6xl mx-auto px-4">
-                <span className="block mb-1 md:mb-2">Stop losing your best AI insights in the noise.</span>
-                <span className="block">Deep-scan your inbox, bookmarks and Google Drive to organize your saved prompts into a structured directory.</span>
+            {/* Tagline - Refined font weight and muted color */}
+            <div className="opacity-0 animate-fade-in text-center w-full max-w-6xl px-4 relative z-10" style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}>
+              <p className="text-slate-400/80 text-base md:text-xl font-light tracking-tight leading-relaxed">
+                <span className="block md:inline-block md:whitespace-nowrap md:mr-2">Stop losing your best AI insights in the noise.</span>
+                <span className="block md:inline-block md:whitespace-nowrap">Deep-scan your inbox, bookmarks and Drive to organize prompts into a structured directory.</span>
               </p>
             </div>
           </div>
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-20 md:mt-28 flex flex-wrap justify-center items-center gap-8 md:gap-20 opacity-20 hover:opacity-100 transition-opacity duration-1000 cursor-default grayscale hover:grayscale-0 px-6">
+        <div className="mt-12 md:mt-24 flex flex-wrap justify-center items-center gap-8 md:gap-20 opacity-20 hover:opacity-100 transition-opacity duration-1000 cursor-default grayscale hover:grayscale-0 px-6">
            <div className="flex items-center gap-3">
              <span className="text-[9px] font-black tracking-[0.5em] uppercase text-obsidian-600">Verified by Stripe</span>
            </div>
@@ -105,7 +107,7 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
       </main>
 
       {/* Testimonial Marquee */}
-      <div className="w-full bg-obsidian-900/10 border-y border-white/[0.02] py-10 md:py-14 overflow-hidden marquee-container">
+      <div className="w-full bg-obsidian-900/10 border-y border-white/[0.02] py-8 md:py-12 overflow-hidden marquee-container">
         <div className="flex whitespace-nowrap marquee-content animate-marquee">
           {testimonials.map((t, i) => (
             <div key={`t1-${i}`} className="inline-flex items-center gap-10 md:gap-14 mx-12 md:mx-28">
@@ -126,7 +128,7 @@ const Hero: React.FC<HeroProps> = ({ onSignIn }) => {
       </div>
 
       {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between text-[9px] text-obsidian-700 font-black uppercase tracking-[0.5em] gap-8 text-center md:text-left">
+      <footer className="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-20 flex flex-col md:flex-row items-center justify-between text-[9px] text-obsidian-700 font-black uppercase tracking-[0.5em] gap-8 text-center md:text-left">
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-20">
            <span className="flex items-center gap-3 md:gap-6">
              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full opacity-50"></div>
